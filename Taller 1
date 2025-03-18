@@ -1,0 +1,299 @@
+ #include <iostream>
+#include <cstdlib>  // Para malloc y free
+#include <string>   // Para std::string
+
+using namespace std;
+
+// Estructura de Producto o nodo Producto
+struct Producto {
+    int id;
+    string nombre; // String de tamaño dinámico
+    struct Producto* sig;
+};
+
+// Declaración de punteros de la estructura Producto
+struct Producto* cab = NULL, * aux = NULL, * aux2 = NULL;
+
+// Funcion para pausar la ejecución y visualizar los datos correctamente antes de limpiar pantalla
+void Pausar() {
+    cout << "\n Presione una tecla para continuar...";
+    cin.get(); // Espera a que el usuario presione una tecla
+    cin.ignore(); // Limpiar el buffer de entrada (por si hay más caracteres pendientes)
+}
+
+// Función para agregar un producto
+void AgregarProducto() {
+    // Reserva memoria dinámicamente para un nuevo producto usando new 
+    aux = new Producto;
+
+    // Verificar si la memoria fue asignada correctamente
+    if (aux == NULL) {
+        cout << "Error: no se pudo asignar memoria." << endl;
+        return;
+    }
+
+    cout << "\n";
+    cout << "Eligió la opción 1 Agregar producto 💾";
+    cout << "\n";
+    cout << "\n";
+
+    cout << "Ingrese el Id del producto:\n";
+    cin >> aux->id;
+
+    cout << "Ingrese el Nombre del producto:\n";
+    cin.ignore();  // Limpiar el buffer de entrada para leer la cadena correctamente
+    getline(cin, aux->nombre); // Leer la cadena completa usando getline
+
+    aux->sig = NULL;
+    cout << "\n";
+
+    // Si la lista está vacía, el nuevo nodo será la cabeza
+    if (cab == NULL) {
+        cab = aux;
+    } else {
+        // Se recorre la lista hasta el último nodo
+        aux2 = cab;
+        while (aux2->sig != NULL) {
+            aux2 = aux2->sig;
+        }
+        // Enlazar el nuevo nodo al final de la lista
+        aux2->sig = aux;
+    }
+
+    // No es necesario liberar memoria aquí, ya que `aux` y `aux2` son punteros locales
+    // y no necesitan ser liberados manualmente.
+
+    cout << "\n PRODUCTO GUARDADO EXITOSAMENTE. ✔";
+}
+
+void MostrarProductos() {
+    // Encabezado llamativo
+    cout << "=========================================\n";
+    cout << "        🛒 LISTA DE PRODUCTOS 🛒        \n";
+    cout << "=========================================\n";
+
+    // Verificar si la lista está vacía
+    if (cab == NULL) {
+        cout << "No hay productos registrados. 😕\n";
+    } else {
+        // Recorre desde la cabeza hasta NULL
+        for (aux = cab; aux != NULL; aux = aux->sig) {
+            cout << "🔹 ID: " << aux->id << " | Nombre: " << aux->nombre << endl;
+        }
+    }
+
+    cout << "=========================================\n";
+    Pausar();
+}
+
+// Función para buscar un producto por su ID
+int BuscarProducto() {
+    int id_producto;
+    cout << "=========================================\n";
+    cout << "        🔍 BUSCAR PRODUCTO 🔍        \n";
+    cout << "=========================================\n";
+    cout << "Digite el ID del producto: ";
+    cin >> id_producto;
+
+    // Recorre la lista comparando el valor
+    for (aux = cab; aux != NULL; aux = aux->sig) {
+        if (aux->id == id_producto) {
+            cout << "=========================================\n";
+            cout << "        ✅ PRODUCTO ENCONTRADO ✅        \n";
+            cout << "=========================================\n";
+            cout << "🔹 ID: " << aux->id << "\n";
+            cout << "🔹 Nombre: " << aux->nombre << "\n";
+            cout << "=========================================\n";
+            Pausar();
+            return 1;  // Valor encontrado
+        }
+    }
+
+    // Si no se encuentra el producto
+    cout << "=========================================\n";
+    cout << "        ❌ PRODUCTO NO ENCONTRADO ❌        \n";
+    cout << "=========================================\n";
+    cout << "No se encontró ningún producto con el ID " << id_producto << ".\n";
+    cout << "=========================================\n";
+    Pausar();
+    return 0; // Valor no encontrado
+}
+
+int EliminarProducto() {
+    int id_producto;
+    cout << "=========================================\n";
+    cout << "        ❌ ELIMINAR PRODUCTO ❌        \n";
+    cout << "=========================================\n";
+    cout << "Digite el ID del producto: ";
+    cin >> id_producto;
+
+    // Punteros para recorrer la lista
+    struct Producto* anterior = NULL;
+    aux = cab;
+
+    // Recorre la lista comparando el valor
+    while (aux != NULL) {
+        if (aux->id == id_producto) {
+            // Si el nodo a eliminar es el primero
+            if (anterior == NULL) {
+                cab = aux->sig; // La cabeza ahora apunta al siguiente nodo
+            } else {
+                anterior->sig = aux->sig; // El nodo anterior apunta al siguiente nodo
+            }
+
+            // Mostrar mensaje de éxito
+            cout << "=========================================\n";
+            cout << "        ✅ PRODUCTO ELIMINADO ✅        \n";
+            cout << "=========================================\n";
+            cout << "🔹 ID: " << aux->id << "\n";
+            cout << "🔹 Nombre: " << aux->nombre << "\n";
+            cout << "=========================================\n";
+
+            // Liberar la memoria del nodo eliminado
+            delete aux; // en c++ usamos esta funcion para eliminar en memoria
+            Pausar();
+            return 1;  // Producto eliminado
+        }
+
+        // Avanzar al siguiente nodo
+        anterior = aux;
+        aux = aux->sig;
+    }
+
+    // Si no se encuentra el producto
+    cout << "=========================================\n";
+    cout << "        ❌ PRODUCTO NO ENCONTRADO ❌        \n";
+    cout << "=========================================\n";
+    cout << "No se encontró ningún producto con el ID " << id_producto << ".\n";
+    cout << "=========================================\n";
+    Pausar();
+    return 0; // Producto no encontrado
+}
+
+// Función contar productos
+int ContarProductos() {
+    int contador = 0;
+    // Recorre la lista contando los nodos
+    for (aux = cab; aux != NULL; aux = aux->sig) {
+        contador++;
+    }
+    cout << "=========================================\n";
+    cout << "        🧮 CONTAR PRODUCTOS 🧮        \n  ";
+    cout << "=========================================\n";
+    cout << "El número de productos es: " << contador << "\n";
+    Pausar();
+    return contador;
+}
+
+// Función modificar productos
+int ModificarProducto(){
+
+    int id_producto;
+    cout << "=========================================\n";
+    cout << "        ✏ MODIFICAR PRODUCTO ✏        \n";
+    cout << "=========================================\n";
+    cout << "Digite el ID del producto: ";
+    cin >> id_producto;
+
+    // Recorre la lista comparando el valor
+    for (aux = cab; aux != NULL; aux = aux->sig) {
+        if (aux->id == id_producto) {
+            cout << "=========================================\n";
+            cout << "        ✅ PRODUCTO ENCONTRADO ✅        \n";
+            cout << "=========================================\n";
+            cout << "🔹 ID: " << aux->id << "\n";
+            cout << "🔹 Nombre: " << aux->nombre << "\n";
+            cout << "=========================================\n";
+            cout << "Ingrese el nuevo nombre del producto:\n";
+            cin.ignore();  // Limpiar el buffer de entrada para leer la cadena correctamente
+            getline(cin, aux->nombre); // Leer la cadena completa usando getline
+            cout << "=========================================\n";
+            cout << "        ✅ PRODUCTO MODIFICADO ✅        \n";
+            cout << "=========================================\n";
+            cout << "🔹 ID: " << aux->id << "\n";
+            cout << "🔹 Nombre: " << aux->nombre << "\n";
+            cout << "=========================================\n";
+            Pausar();
+            return 1;  // Valor encontrado
+        }
+    }
+
+    // Si no se encuentra el producto
+    cout << "=========================================\n";
+    cout << "        ❌ PRODUCTO NO ENCONTRADO ❌        \n";
+    cout << "=========================================\n";
+    cout << "No se encontró ningún producto con el ID " << id_producto << ".\n";
+    cout << "=========================================\n";
+    Pausar();
+    return 0; // Valor no encontrado     
+
+}
+
+int main() {
+    int opcion = 0; // Variable para almacenar las opciones
+
+    while (opcion != 7) { // Mientras la opción sea diferente de 7 se ejecutará
+        system("clear"); // Limpiar pantalla si está en Linux
+        system("cls");   // Limpiar pantalla si está en Windows
+
+        cout << "\n";
+        cout << "\n";
+        cout << "===============================\n";
+        cout << "     *** Menú Principal ***     \n";
+        cout << "===============================\n";
+        cout << " 1. Agregar producto 💾\n";
+        cout << " 2. Mostrar productos 👁‍🗨\n";
+        cout << " 3. Buscar producto 🔎\n";
+        cout << " 4. Eliminar producto❌\n";
+        cout << " 5. Contar productos 🧮\n";
+        cout << " 6. Modificar productos ✏\n";
+        cout << " 7. Salir del programa 🚀\n";
+        cout << "===============================\n";
+        cout << " Seleccione una opción: ";
+        cout << "\n";
+        cout << "\n";
+
+        cin >> opcion;
+
+        switch (opcion) {
+            case 1: {
+                AgregarProducto();
+                break;
+            }
+            case 2:
+			{
+				MostrarProductos();
+                break;
+			}
+            case 3:
+                {
+                    BuscarProducto();
+                    break;
+                }
+            case 4:
+                {
+                    EliminarProducto();
+                    break;
+                }
+            case 5:
+                {
+                    ContarProductos();
+                    break;
+                }
+            case 6:
+               {
+                     ModificarProducto();
+                     break;
+               }
+            case 7:
+                cout << "SALIO EXITOSAMENTE DEL PROGRAMA 🚪\n";
+                opcion = 7;
+                break;
+            default:
+                cout << "Opción no válida. Intente de nuevo.\n";
+                break;
+        }
+    }
+
+    return 0;
+}
