@@ -1,0 +1,226 @@
+#include <iostream>
+using namespace std;
+
+// Estructura de cliente
+struct cliente {
+int id;
+char nombre[30];
+char genero;
+char motivo[30];
+struct cliente *sig;
+};
+struct cliente *cab, *aux, *aux2;
+int contCliente=1;
+int registrarFifo(){
+aux = ((struct cliente *)malloc(sizeof(struct cliente)));
+aux->sig = NULL;
+aux->id = contCliente++;
+cout<<"Nombre: ";
+cin>>aux->nombre;
+cout<<"Motivo: ";
+cin>>aux->motivo;
+cout<<"Genero: ";
+cin>>aux->genero;
+if(cabNULL){
+cab = aux;
+} else{
+aux2 = cab;
+while(aux2->sig!=NULL){
+aux2 = aux2->sig;
+}
+aux2->sig = aux;
+}
+cout<<"Cliente registrado con exito!"<<endl;
+}
+int mostrarFifo(){
+aux = cab;
+if(auxNULL){
+cout<<"No hay clientes registrados!"<<endl;
+} else{
+cout<<"Clientes registrados: "<<endl;
+while(aux!=NULL){
+cout<<"ID: "<<aux->id<<endl;
+cout<<"Nombre: "<<aux->nombre<<endl;
+cout<<"Motivo: "<<aux->motivo<<endl;
+cout<<"Genero: "<<aux->genero<<endl;
+aux = aux->sig;
+}
+}
+}
+int sacarFifo(){
+aux = cab;
+if(aux==NULL){
+cout<<"No hay clientes registrados!"<<endl;
+} else{
+cab = cab->sig;
+free(aux);
+cout<<"Cliente atendido!"<<endl;
+}
+}
+int main(){
+int op=0;
+cab = NULL;
+while(op!=4){
+cout<<"1. Registrar cliente"<<endl;
+cout<<"2. Mostrar clientes"<<endl;
+cout<<"3. Atender cliente"<<endl;
+cout<<"4. Salir"<<endl;
+cout<<"Opcion: ";
+cin>>op;
+switch(op){
+case 1:
+registrarFifo();
+break;
+case 2:
+mostrarFifo();
+break;
+case 3:
+sacarFifo();
+break;
+case 4:
+cout<<"Saliendo…"<<endl;
+break;
+default:
+cout<<"Opcion no valida!"<<endl;
+}
+}
+return 0;
+}
+
+#include <iostream>
+using namespace std;
+
+// Estructura de cliente
+struct cliente {
+int id;
+char nombre[30];
+char genero;
+char motivo[30];
+struct cliente *sig;
+};
+struct cliente *cab, *aux, *aux2;
+int contCliente=1;
+int registrarFifo(){
+aux = ((struct cliente *)malloc(sizeof(struct cliente)));
+aux->sig = NULL;
+aux->id = contCliente++;
+cout<<"Nombre: ";
+cin>>aux->nombre;
+cout<<"Motivo: ";
+cin>>aux->motivo;
+cout<<"Genero: ";
+cin>>aux->genero;
+if(cabNULL){
+cab = aux;
+} else{
+aux2 = cab;
+while(aux2->sig!=NULL){
+aux2 = aux2->sig;
+}
+aux2->sig = aux;
+}
+cout<<"Cliente registrado con exito!"<<endl;
+}
+int mostrarFifo(){
+aux = cab;
+if(auxNULL){
+cout<<"No hay clientes registrados!"<<endl;
+} else{
+cout<<"Clientes registrados: "<<endl;
+while(aux!=NULL){
+cout<<"ID: "<<aux->id<<endl;
+cout<<"Nombre: "<<aux->nombre<<endl;
+cout<<"Motivo: "<<aux->motivo<<endl;
+cout<<"Genero: "<<aux->genero<<endl;
+aux = aux->sig;
+}
+}
+}
+int sacarFifo(){
+aux = cab;
+if(aux==NULL){
+cout<<"No hay clientes registrados!"<<endl;
+} else{
+cab = cab->sig;
+free(aux);
+cout<<"Cliente atendido!"<<endl;
+}
+}
+int main(){
+int op=0;
+cab = NULL;
+while(op!=4){
+cout<<"1. Registrar cliente"<<endl;
+cout<<"2. Mostrar clientes"<<endl;
+cout<<"3. Atender cliente"<<endl;
+cout<<"4. Salir"<<endl;
+cout<<"Opcion: ";
+cin>>op;
+switch(op){
+case 1:
+registrarFifo();
+break;
+case 2:
+mostrarFifo();
+break;
+case 3:
+sacarFifo();
+break;
+case 4:
+cout<<"Saliendo…"<<endl;
+break;
+default:
+cout<<"Opcion no valida!"<<endl;
+}
+}
+return 0;
+}
+
+//Declaracion Nodo
+struct cliente {
+    int id;
+    struct cliente *sig;//NULL
+};
+struct cliente *top, *aux, *aux2;
+
+int crearNodo(){    
+    aux = ((struct cliente *) malloc(sizeof(struct cliente)));
+    printf("Registre el id: ");
+    scanf("%d", &aux->id);
+    
+    if(top==NULL){
+        top = aux;
+        top->sig = NULL;
+    } else {
+        aux->sig = top;
+        top = aux;
+    }
+    aux = NULL;
+    free(aux);
+}
+
+int mostrarcliente(){
+    for(aux=top; aux!=NULL; aux=aux->sig){
+        printf("cliente: %d\n", aux->id);        
+    }
+}
+
+int main(){
+    int opc;
+    do {
+        printf("1. Registrar cliente\n");
+        printf("2. Mostrar cliente\n");
+        printf("3. contar cliente\n");
+        printf("4. atender siguiente cliente\n");
+        printf("5. mostrar historial\n");
+        printf("6. deshacer ultima atencion\n");
+        printf("7. salir\n");
+        scanf("%d", &opc);
+        switch (opc)
+        {
+            case 1: crearNodo(); break;
+            case 2: mostrarNodo(); break;
+        }
+    }while(opc!=7);
+return 0;
+}
